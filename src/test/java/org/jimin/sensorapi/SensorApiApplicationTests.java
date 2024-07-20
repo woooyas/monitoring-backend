@@ -1,10 +1,10 @@
-package org.jimin.mocksensorapi;
+package org.jimin.sensorapi;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class MockSensorApiApplicationTests {
+class SensorApiApplicationTests {
 
 	@Test
 	void contextLoads() {

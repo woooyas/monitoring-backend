@@ -1,13 +1,13 @@
-package org.jimin.mocksensorapi;
+package org.jimin.sensorapi;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class MockSensorApiApplication {
+public class SensorApiApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(MockSensorApiApplication.class, args);
+		SpringApplication.run(SensorApiApplication.class, args);
 	}
 
 }

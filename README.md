@@ -1,1 +1,1 @@
-# mock-sensor-api
+# sensor-api
