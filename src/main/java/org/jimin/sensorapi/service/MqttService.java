@@ -20,9 +20,11 @@ public class MqttService {
 
     private final MqttConfig mqttConfig;
     private final ObjectMapper objectMapper;
+    private final InfluxdbService influxdbService;
     private MqttClient mqttClient;
 
-    public void subscribe(String topicFilter) {
+
+    public void subscribeAndSave(String topicFilter) {
         try {
             mqttClient = mqttConfig.mqttClient();
             mqttClient.setCallback(new MqttCallback() {
@@ -42,7 +44,7 @@ public class MqttService {
                     if (data == null) {
                         return;
                     }
-
+                    influxdbService.saveSensorData(data);
                 }
 
                 @Override
