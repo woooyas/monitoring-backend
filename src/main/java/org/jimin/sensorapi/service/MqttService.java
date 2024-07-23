@@ -6,14 +6,16 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.paho.client.mqttv3.*;
 import org.jimin.sensorapi.config.MqttConfig;
-import org.jimin.sensorapi.dto.SensorValue;
+import org.jimin.sensorapi.dto.SensorData;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PreDestroy;
+import java.util.Map;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@SuppressWarnings("unchecked")
 public class MqttService {
 
     private final MqttConfig mqttConfig;
@@ -36,12 +38,11 @@ public class MqttService {
 
                 @Override
                 public void messageArrived(String topic, MqttMessage message) {
-                    try {
-                        SensorValue sensorValue = objectMapper.readValue(message.toString(), SensorValue.class);
-
-                    } catch (JsonProcessingException e) {
-                        log.error("mqtt 메세지 처리 실패({}): ", message, e);
+                    SensorData data = mapToSensorData(topic, message.toString());
+                    if (data == null) {
+                        return;
                     }
+
                 }
 
                 @Override
@@ -51,6 +52,24 @@ public class MqttService {
             mqttClient.subscribe(topicFilter, 2);
         } catch (MqttException e) {
             log.error("MqttException: ", e);
+        }
+    }
+
+    private SensorData mapToSensorData(String topic, String message) {
+        String[] topics = topic.split("/");
+        try {
+            Map<String, Object> map = objectMapper.readValue(message, Map.class);
+            return SensorData.builder()
+                             .time(Long.parseLong(map.get("time").toString()))
+                             .value(map.get("value").toString())
+                             .place(topics[6])
+                             .deviceId(topics[8])
+                             .measurement(topics[10])
+                             .topic(topic)
+                             .build();
+        } catch (JsonProcessingException e) {
+            log.error("mqtt 메세지 처리 실패({}): ", message, e);
+            return null;
         }
     }
 
