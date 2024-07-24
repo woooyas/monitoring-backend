@@ -27,20 +27,32 @@ jobs:
       - name: Set up application.yml
         run: |
           cat << EOF > ./src/main/resources/application.yml
+            datasource:
+              url: ${{ secrets.MYSQL_URL }}
+              username: ${{ secrets.MYSQL_USERNAME }}
+              password: ${{ secrets.MYSQL_PASSWORD }}
+              driver-class-name: com.mysql.cj.jdbc.Driver
           mqtt:
             broker: ${{ secrets.MQTT_BROKER }}
+          influxdb:
+            url: ${{ secrets.INFLUXDB_URL }}
+            token: ${{ secrets.INFLUXDB_TOKEN }}
+            org: ${{ secrets.INFLUXDB_ORG }}
+            bucket: ${{ secrets.INFLUXDB_BUCKET }}
           EOF
 
       - name: Build with Maven
         run: mvn -B package --file pom.xml
 
       - name: web docker build and push
+        if: github.event_name == 'push'
         run: |
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           docker build -t ${{ secrets.DOCKER_REPO }} .
           docker push ${{ secrets.DOCKER_REPO }}
 
       - name: executing remote ssh commands using password
+        if: github.event_name == 'push'
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_IP }}
