@@ -27,6 +27,11 @@ jobs:
       - name: Set up application.yml
         run: |
           cat << EOF > ./src/main/resources/application.yml
+            datasource:
+              url: ${{ secrets.MYSQL_URL }}
+              username: ${{ secrets.MYSQL_USERNAME }}
+              password: ${{ secrets.MYSQL_PASSWORD }}
+              driver-class-name: com.mysql.cj.jdbc.Driver
           mqtt:
             broker: ${{ secrets.MQTT_BROKER }}
           influxdb:
