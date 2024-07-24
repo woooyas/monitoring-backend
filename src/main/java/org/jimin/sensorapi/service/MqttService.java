@@ -24,7 +24,7 @@ public class MqttService {
     private MqttClient mqttClient;
 
 
-    public void subscribeAndSave(String topicFilter) {
+    public void subscribeAndSave(String topicFilter, int qos) {
         try {
             mqttClient = mqttConfig.mqttClient();
             mqttClient.setCallback(new MqttCallback() {
@@ -51,7 +51,7 @@ public class MqttService {
                 public void deliveryComplete(IMqttDeliveryToken token) {
                 }
             });
-            mqttClient.subscribe(topicFilter, 2);
+            mqttClient.subscribe(topicFilter, qos);
         } catch (MqttException e) {
             log.error("MqttException: ", e);
         }
