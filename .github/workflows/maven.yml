@@ -26,7 +26,7 @@ jobs:
 
       - name: Set up application.yml
         run: |
-          cat << EOF > ./src/main/resources/application.yml\
+          cat << EOF > ./src/main/resources/application.yml
           spring:
             profiles:
               active: prod
