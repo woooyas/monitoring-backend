@@ -6,21 +6,25 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
-@Table(name = "mqtt_subscriptions")
-public class MqttSubscription {
+@Table(name = "Sensors")
+public class Sensor implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private int sensorId;
 
     @Column(nullable = false)
-    private String topic;
+    private String sensorName;
 
     @Column(nullable = false)
-    private byte qos;
+    private String location;
+
+    @Column(nullable = false)
+    private String deviceId;
 }

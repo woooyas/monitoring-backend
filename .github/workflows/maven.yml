@@ -35,13 +35,6 @@ jobs:
               username: ${{ secrets.MYSQL_USERNAME }}
               password: ${{ secrets.MYSQL_PASSWORD }}
               driver-class-name: com.mysql.cj.jdbc.Driver
-          mqtt:
-            broker: ${{ secrets.MQTT_BROKER }}
-          influxdb:
-            url: ${{ secrets.INFLUXDB_URL }}
-            token: ${{ secrets.INFLUXDB_TOKEN }}
-            org: ${{ secrets.INFLUXDB_ORG }}
-            bucket: ${{ secrets.INFLUXDB_BUCKET }}
           EOF
 
       - name: Build with Maven
