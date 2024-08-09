@@ -1,9 +1,6 @@
 package org.jimin.sensorapi.entity;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -19,6 +16,7 @@ public class Sensor implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int sensorId;
 
+    @Setter
     @Column(nullable = false)
     private String sensorName;
 
