@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/sensor")
+@RequestMapping("/api/sensors")
 public class SensorController {
 
     private final SensorService sensorService;
