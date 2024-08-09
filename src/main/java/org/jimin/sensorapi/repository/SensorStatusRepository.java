@@ -10,4 +10,9 @@ public interface SensorStatusRepository extends JpaRepository<SensorStatus, Inte
     @Query("SELECT s FROM SensorStatus s WHERE s.time = " +
             "(SELECT MAX(ss.time) FROM SensorStatus ss WHERE ss.sensor.deviceId = s.sensor.deviceId)")
     Page<SensorStatus> findLatestSensorStatusByDeviceId(Pageable pageable);
+
+    @Query("SELECT s FROM SensorStatus s WHERE s.time = " +
+            "(SELECT MAX(ss.time) FROM SensorStatus ss WHERE ss.sensor.deviceId = s.sensor.deviceId)" +
+            "ORDER BY s.batteryLevel ASC")
+    Page<SensorStatus> findByBatteryLevelAsc(Pageable pageable);
 }

@@ -16,4 +16,8 @@ public class SensorStatusService {
     public Page<SensorStatus> getLatestSensorStatuses(Pageable pageable) {
         return sensorStatusRepository.findLatestSensorStatusByDeviceId(pageable);
     }
+
+    public Page<SensorStatus> getBatteryLevelAscStatuses(Pageable pageable) {
+        return sensorStatusRepository.findByBatteryLevelAsc(pageable);
+    }
 }

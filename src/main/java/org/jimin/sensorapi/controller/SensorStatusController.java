@@ -20,4 +20,9 @@ public class SensorStatusController {
     public Page<SensorStatus> getLatestSensorStatuses(Pageable pageable) {
         return sensorStatusService.getLatestSensorStatuses(pageable);
     }
+
+    @GetMapping("/low-battery")
+    public Page<SensorStatus> getBatteryLevelAscStatuses(Pageable pageable) {
+        return sensorStatusService.getBatteryLevelAscStatuses(pageable);
+    }
 }
