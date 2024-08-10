@@ -7,7 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 public interface SensorStatusRepository extends JpaRepository<SensorStatus, Integer> {
-    @Query("SELECT ss FROM SensorStatus ss")
+    @Query("SELECT s FROM SensorStatus s WHERE s.time = " +
+            "(SELECT MAX(ss.time) FROM SensorStatus ss WHERE ss.sensor.deviceId = s.sensor.deviceId)")
     Page<SensorStatus> findLatestSensorStatusByDeviceId(Pageable pageable);
 
     @Query("SELECT s FROM SensorStatus s WHERE s.time = " +
