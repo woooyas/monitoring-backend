@@ -14,11 +14,11 @@ public class WebConfig implements WebMvcConfigurer {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/api/**")
-                        .allowedOrigins(
-                                "http://localhost:3000",
-                                "https://woooyas.github.io/monitoring"
-                        )
-                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS");
+                        .allowedOrigins("http://34.168.34.213")
+                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                        .allowedHeaders("Content-Type", "Authorization")
+                        .allowCredentials(true)
+                        .maxAge(3600);
             }
         };
     }
