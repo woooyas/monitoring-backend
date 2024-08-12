@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -29,17 +30,22 @@ public class SensorDataService {
         return sensorDataRepository.findRecentDataPageByPlacesAndMeasurement(places, measurement, pageable);
     }
 
-    public Page<SensorData> getRecentDataPage(List<String> places, List<String> measurements, Pageable pageable) {
+    public Page<SensorData> getDataPage(List<String> places, List<String> measurements, Pageable pageable) {
         if (isNotEmpty(measurements) && isNotEmpty(places)) {
-            return sensorDataRepository.findRecentDataPageByPlacesAndMeasurements(places, measurements, pageable);
+            return sensorDataRepository.findDataPageByPlacesAndMeasurements(places, measurements, pageable);
         }
         if (isNotEmpty(places)) {
-            return sensorDataRepository.findRecentDataPageByPlaces(places, pageable);
+            return sensorDataRepository.findDataPageByPlaces(places, pageable);
         }
         if (isNotEmpty(measurements)) {
-            return sensorDataRepository.findRecentDataPageByMeasurements(measurements, pageable);
+            return sensorDataRepository.findDataPageByMeasurements(measurements, pageable);
         }
-        return sensorDataRepository.findRecentDataPage(pageable);
+        return sensorDataRepository.findDataPage(pageable);
+    }
+
+    public List<SensorData> getTodayData(List<String> places, String measurement) {
+        long yesterday = new Date().getTime() - 86400000;
+        return sensorDataRepository.findTodayData(places, measurement, yesterday);
     }
 
     private boolean isNotEmpty(List<?> list) {

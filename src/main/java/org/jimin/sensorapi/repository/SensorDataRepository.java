@@ -28,19 +28,22 @@ public interface SensorDataRepository extends JpaRepository<Sensor, Integer> {
 
     @Query("SELECT sd FROM SensorData sd WHERE sd.place IN (:places) " +
             "AND sd.measurement IN (:measurements)")
-    Page<SensorData> findRecentDataPageByPlacesAndMeasurements(
+    Page<SensorData> findDataPageByPlacesAndMeasurements(
             @Param("places") List<String> places,
             @Param("measurements") List<String> measurements,
             Pageable pageable);
 
     @Query("SELECT sd FROM SensorData sd WHERE sd.measurement IN (:measurements)")
-    Page<SensorData> findRecentDataPageByMeasurements(
+    Page<SensorData> findDataPageByMeasurements(
             @Param("measurements") List<String> measurement, Pageable pageable);
 
     @Query("SELECT sd FROM SensorData sd WHERE sd.place IN (:places)")
-    Page<SensorData> findRecentDataPageByPlaces(
+    Page<SensorData> findDataPageByPlaces(
             @Param("places") List<String> places, Pageable pageable);
 
     @Query("SELECT sd FROM SensorData sd")
-    Page<SensorData> findRecentDataPage(Pageable pageable);
+    Page<SensorData> findDataPage(Pageable pageable);
+
+    @Query("SELECT sd FROM SensorData sd where sd.time >= :yesterday AND sd.place IN (:places) AND sd.measurement = :measurement")
+    List<SensorData> findTodayData(@Param("places") List<String> places, @Param("measurement") String measurement, @Param("yesterday") long time);
 }
