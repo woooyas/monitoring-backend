@@ -11,16 +11,20 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
-@Table(name = "mqtt_subscriptions")
-public class MqttSubscription {
+@Table
+public class SensorStatus {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private int statusId;
+
+    @ManyToOne
+    @JoinColumn(name = "deviceId", referencedColumnName = "deviceId", nullable = false)
+    private Sensor sensor;
 
     @Column(nullable = false)
-    private String topic;
+    private long time;
 
     @Column(nullable = false)
-    private byte qos;
+    private int batteryLevel;
 }
