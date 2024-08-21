@@ -23,7 +23,7 @@ public class SensorDataService {
         List<String> places = Arrays.asList("outdoor", "class_a", "office", "lobby");
         long sixHoursAgo = Instant.now().minusSeconds(6 * 3600).toEpochMilli();
 
-        return sensorDataRepository.findRecentData(measurement, places, sixHoursAgo);
+        return sensorDataRepository.findRecentData(places, measurement, sixHoursAgo);
     }
 
     public Page<SensorData> getRecentDataPageByPlacesAndMeasurement(String measurement, List<String> places, Pageable pageable) {
@@ -45,7 +45,8 @@ public class SensorDataService {
 
     public List<SensorData> getTodayData(List<String> places, String measurement) {
         long yesterday = new Date().getTime() - 86400000;
-        return sensorDataRepository.findTodayData(places, measurement, yesterday);
+
+        return sensorDataRepository.findRecentData(places, measurement, yesterday);
     }
 
     private boolean isNotEmpty(List<?> list) {
