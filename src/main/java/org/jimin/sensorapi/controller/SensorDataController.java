@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -37,7 +38,12 @@ public class SensorDataController {
     }
 
     @GetMapping("/today-data")
-    public List<SensorData> getTodayData(@RequestParam(required = false) List<String> places, @RequestParam(required = false) String measurement) {
-        return sensorDataService.getTodayData(places, measurement);
+    public ResponseEntity<List<SensorData>> getTodayData(@RequestParam(required = false) List<String> places, @RequestParam(required = false) String measurement) {
+        return ResponseEntity.ok(sensorDataService.getTodayData(places, measurement));
+    }
+
+    @GetMapping("/recent-and-yesterday")
+    public ResponseEntity<Map<String, Double>> getRecentAndYesterdayValueMap(@RequestParam(required = false) List<String> places, @RequestParam(required = false) String measurement) {
+        return ResponseEntity.ok(sensorDataService.getRecentAndYesterdayAverageValue(places, measurement));
     }
 }

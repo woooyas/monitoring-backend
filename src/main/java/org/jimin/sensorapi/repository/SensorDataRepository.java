@@ -14,7 +14,11 @@ public interface SensorDataRepository extends JpaRepository<Sensor, Integer> {
 
     // 시간 범위 설정, 최근순, places, measurement
     @Query("SELECT sd FROM SensorData sd WHERE sd.place IN (:places) AND sd.measurement = :measurement AND sd.time >= :timeRange ORDER BY sd.time DESC")
-    List<SensorData> findRecentData(@Param("places") List<String> places, @Param("measurement") String measurement, @Param("timeRange") long timeRange);
+    List<SensorData> findRecentDataByPlacesAndMeasurementAndTime(@Param("places") List<String> places, @Param("measurement") String measurement, @Param("timeRange") long timeRange);
+
+    // 시간 범위 설정, 최근순, places, measurement
+    @Query("SELECT sd FROM SensorData sd WHERE sd.place = :place AND sd.measurement = :measurement AND sd.time >= :timeRange")
+    List<SensorData> findRecentDataPageByPlaceAndMeasurementAndTime(@Param("place") String place, @Param("measurement") String measurement, @Param("timeRange") long timeRange, Pageable pageable);
 
     // 최근순, 페이지, places, measurement
     @Query("SELECT sd FROM SensorData sd WHERE sd.place IN (:places) AND sd.measurement = :measurement ORDER BY sd.time DESC")
