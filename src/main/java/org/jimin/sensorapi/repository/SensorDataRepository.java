@@ -24,6 +24,10 @@ public interface SensorDataRepository extends JpaRepository<Sensor, Integer> {
     @Query("SELECT sd FROM SensorData sd WHERE sd.place IN (:places) AND sd.measurement = :measurement ORDER BY sd.time DESC")
     Page<SensorData> findRecentDataPageByPlacesAndMeasurement(@Param("places") List<String> places, @Param("measurement") String measurement, Pageable pageable);
 
+    // 최근순, 페이지, place, measurement
+    @Query("SELECT sd FROM SensorData sd WHERE sd.place = :place AND sd.measurement = :measurement ORDER BY sd.time DESC")
+    Page<SensorData> findRecentDataPageByPlaceAndMeasurement(@Param("place") String place, @Param("measurement") String measurement, Pageable pageable);
+
     // 페이지, places, measurements
     @Query("SELECT sd FROM SensorData sd WHERE sd.place IN (:places) AND sd.measurement IN (:measurements)")
     Page<SensorData> findDataPageByPlacesAndMeasurements(@Param("places") List<String> places, @Param("measurements") List<String> measurements, Pageable pageable);

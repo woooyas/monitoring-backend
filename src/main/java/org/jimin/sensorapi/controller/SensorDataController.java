@@ -31,8 +31,7 @@ public class SensorDataController {
     }
 
     @GetMapping("/recent-data")
-    public ResponseEntity<Page<SensorData>> getDataPageByPlaceAndMeasurement
-            (@RequestParam(required = false) List<String> places, @RequestParam(required = false) List<String> measurements, Pageable pageable) {
+    public ResponseEntity<Page<SensorData>> getDataPageByPlaceAndMeasurement(@RequestParam(required = false) List<String> places, @RequestParam(required = false) List<String> measurements, Pageable pageable) {
         Page<SensorData> sensorDataList = sensorDataService.getDataPage(places, measurements, pageable);
         return ResponseEntity.ok(sensorDataList);
     }
