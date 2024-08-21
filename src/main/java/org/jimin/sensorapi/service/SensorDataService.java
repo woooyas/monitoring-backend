@@ -57,13 +57,9 @@ public class SensorDataService {
         Pageable recetPageable = PageRequest.of(0, 1, Sort.by("time").descending());
         Pageable yesterdayPageable = PageRequest.of(0, 1, Sort.by("time").ascending());
 
-        double recentAvg = places.stream()
-                                 .mapToDouble(place -> sensorDataRepository.findRecentDataPageByPlaceAndMeasurementAndTime(place, measurement, yesterday, recetPageable).get(0).getValue())
-                                 .average().getAsDouble();
+        double recentAvg = places.stream().mapToDouble(place -> sensorDataRepository.findRecentDataPageByPlaceAndMeasurementAndTime(place, measurement, yesterday, recetPageable).get(0).getValue()).average().getAsDouble();
 
-        double yesterdayAvg = places.stream()
-                                    .mapToDouble(place -> sensorDataRepository.findRecentDataPageByPlaceAndMeasurementAndTime(place, measurement, yesterday, yesterdayPageable).get(0).getValue())
-                                    .average().getAsDouble();
+        double yesterdayAvg = places.stream().mapToDouble(place -> sensorDataRepository.findRecentDataPageByPlaceAndMeasurementAndTime(place, measurement, yesterday, yesterdayPageable).get(0).getValue()).average().getAsDouble();
 
         return Map.of("recent", round(recentAvg), "yesterday", round(yesterdayAvg));
     }
@@ -73,6 +69,6 @@ public class SensorDataService {
     }
 
     private double round(double value) {
-        return Math.round(value * 100.0) / 100.0;
+        return Math.round(value * 10.0) / 10.0;
     }
 }
