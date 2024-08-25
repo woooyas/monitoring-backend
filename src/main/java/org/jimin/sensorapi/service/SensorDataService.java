@@ -4,13 +4,13 @@ import lombok.RequiredArgsConstructor;
 import org.jimin.sensorapi.entity.SensorData;
 import org.jimin.sensorapi.repository.SensorDataRepository;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -23,7 +23,7 @@ public class SensorDataService {
         List<String> places = Arrays.asList("outdoor", "class_a", "office", "lobby");
         long sixHoursAgo = Instant.now().minusSeconds(6 * 3600).toEpochMilli();
 
-        return sensorDataRepository.findRecentData(measurement, places, sixHoursAgo);
+        return sensorDataRepository.findRecentDataByPlacesAndMeasurementAndTime(places, measurement, sixHoursAgo);
     }
 
     public Page<SensorData> getRecentDataPageByPlacesAndMeasurement(String measurement, List<String> places, Pageable pageable) {
@@ -45,10 +45,40 @@ public class SensorDataService {
 
     public List<SensorData> getTodayData(List<String> places, String measurement) {
         long yesterday = new Date().getTime() - 86400000;
-        return sensorDataRepository.findTodayData(places, measurement, yesterday);
+
+        return sensorDataRepository.findRecentDataByPlacesAndMeasurementAndTime(places, measurement, yesterday);
+    }
+
+    public Map<String, Double> getRecentAndYesterdayAverageValue(List<String> places, String measurement) {
+        Pageable recentPageable = PageRequest.of(0, 1);
+        Pageable yesterdayPageable = PageRequest.of(0, 1, Sort.by("time").ascending());
+
+        List<Float> recentValues = new ArrayList<>();
+        List<Float> yesterdayValues = new ArrayList<>();
+
+        for (String place : places) {
+            SensorData sensorData = sensorDataRepository.findRecentDataPageByPlaceAndMeasurement(place, measurement, recentPageable).getContent().get(0);
+            recentValues.add(sensorData.getValue());
+            yesterdayValues.add(sensorDataRepository.findRecentDataPageByPlaceAndMeasurementAndTime(place, measurement, sensorData.getTime() - 86460000, yesterdayPageable).get(0).getValue());
+        }
+
+        return Map.of("recent", getAvg(recentValues), "yesterday", getAvg(yesterdayValues));
+    }
+
+    public List<SensorData> findDataByMeasurementAndTimeRange(String measurement, long startTime, long endTime) {
+        return sensorDataRepository.findDataByMeasurementAndTimeRange(measurement, startTime, endTime);
     }
 
     private boolean isNotEmpty(List<?> list) {
         return list != null && !list.isEmpty();
+    }
+
+    private double getAvg(List<Float> list) {
+        float sum = 0;
+        for (Float f : list) {
+            sum += f;
+        }
+
+        return Math.round(sum / list.size() * 10.0) / 10.0;
     }
 }
