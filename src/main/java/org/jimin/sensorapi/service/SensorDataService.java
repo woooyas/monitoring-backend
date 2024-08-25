@@ -65,6 +65,10 @@ public class SensorDataService {
         return Map.of("recent", getAvg(recentValues), "yesterday", getAvg(yesterdayValues));
     }
 
+    public List<SensorData> findDataByMeasurementAndTimeRange(String measurement, long startTime, long endTime) {
+        return sensorDataRepository.findDataByMeasurementAndTimeRange(measurement, startTime, endTime);
+    }
+
     private boolean isNotEmpty(List<?> list) {
         return list != null && !list.isEmpty();
     }

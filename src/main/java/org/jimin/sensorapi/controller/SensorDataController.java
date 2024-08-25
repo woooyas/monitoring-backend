@@ -45,4 +45,10 @@ public class SensorDataController {
     public ResponseEntity<Map<String, Double>> getRecentAndYesterdayValueMap(@RequestParam(required = false) List<String> places, @RequestParam(required = false) String measurement) {
         return ResponseEntity.ok(sensorDataService.getRecentAndYesterdayAverageValue(places, measurement));
     }
+
+    @GetMapping("/range")
+    public ResponseEntity<List<SensorData>> findDataByMeasurementAndTimeRange(@RequestParam String measurement, @RequestParam long startTime, @RequestParam long endTime) {
+        return ResponseEntity.ok(sensorDataService.findDataByMeasurementAndTimeRange(measurement, startTime, endTime));
+    }
+
 }
